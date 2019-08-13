@@ -26,7 +26,7 @@ jobs:
           name: Steps
           command: |
             date --rfc-3339=seconds
-            nvm install
+            #nvm install
             bundle install --path vendor/bundle
             yarn install
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
