@@ -34,7 +34,7 @@ jobs:
             sudo gem update --system
             bundle -v
             nvm install
-            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
             bundle update --bundler
             #bundle check --path vendor/bundle
             bundle install --path vendor/bundle
