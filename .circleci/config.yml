@@ -53,6 +53,14 @@ jobs:
           command: |            
             echo "before yarn"
             yarn install
+      - save_cache:
+          key: npmcache
+          paths:
+            - node_modules
+            - /home/circleci/.npm
+      - run:
+          name: Steps
+          command: |      
             echo "before curl"
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
@@ -69,9 +77,4 @@ jobs:
             './cc-test-reporter sum-coverage coverage/codeclimate.*.json'
             './cc-test-reporter upload-coverage'
             'bundle exec bundle-audit check --update --ignore CVE-2015-9284'
-            yarn build-storybook
-      - save_cache:
-          key: npmcache
-          paths:
-            - node_modules
-            - /home/circleci/.npm
+            yarn build-storybook            
