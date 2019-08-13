@@ -4,10 +4,10 @@ workflows:
   version: 2
   build:
     jobs:
-    - debug
+      - build
 
 jobs:
-  debug:    
+  build:    
     environment:
       BUNDLE_JOBS: 3
       BUNDLE_RETRY: 3
@@ -18,13 +18,12 @@ jobs:
       CC_TEST_REPORTER_ID: f39e060a8b1a558ebd8aff75d5b9760bf1ae98f3f85d628ae28814f3c66438cd
       DATABASE_URL: "postgres://postgres@localhost/"
       COVERAGE: true
-    docker: # run the steps with Docker
+    docker:
       - image: circleci/ruby:2.6.3-stretch-node-browsers
       - image: circleci/postgres:9.6-alpine
         environment:
           POSTGRES_DB: pandas_nosetest
           POSTGRES_USER: postgres
-          privileged: true        
     steps:
       - checkout
       - restore_cache:
@@ -36,13 +35,11 @@ jobs:
             date --rfc-3339=seconds
             sudo gem update --system
             gem install bundler
+            bundle update --bundler
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
             export NVM_DIR="/opt/circleci/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-            bundle -v
             #nvm install
-            bundle update --bundler
-            #bundle check --path vendor/bundle
             bundle install --path vendor/bundle
       - save_cache:
           key: bundle-cache
@@ -50,8 +47,7 @@ jobs:
             - vendor/bundle
       - run:
           name: Steps
-          command: |            
-            echo "before yarn"
+          command: |
             yarn install
       - save_cache:
           key: npmcache
@@ -60,11 +56,9 @@ jobs:
             - /home/circleci/.npm
       - run:
           name: Steps
-          command: |      
-            echo "before curl"
+          command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
-            echo "before db:create"
+            chmod +x ./cc-test-reporter            
             bundle exec rails db:create
             bundle exec rails webpacker:compile
             bundle exec rails db:schema:load
