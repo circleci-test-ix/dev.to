@@ -27,7 +27,7 @@ jobs:
           privileged: true        
     steps:
       - checkout
-      - run: bundle -v
+      - run: bundle update --bundler
 #       - run:
 #           name: Steps
 #           command: |
