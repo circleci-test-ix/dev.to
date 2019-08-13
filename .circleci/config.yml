@@ -9,7 +9,7 @@ workflows:
 jobs:
   debug:    
     docker: # run the steps with Docker
-      - image: circleci/ruby:2.6.3-stretch
+      - image: circleci/ruby:2.6.3-stretch-node-browsers
         environment:
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
