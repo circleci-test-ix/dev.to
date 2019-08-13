@@ -27,7 +27,7 @@ jobs:
           privileged: true        
     steps:
       - checkout
-      - run: gem update --system
+      - run: sudo gem update --system
       - run: bundle -v
 #       - run:
 #           name: Steps
