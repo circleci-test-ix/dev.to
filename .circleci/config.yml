@@ -27,6 +27,9 @@ jobs:
           privileged: true        
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - cache
       - run:
           name: Steps
           command: |
@@ -57,3 +60,9 @@ jobs:
             './cc-test-reporter upload-coverage'
             'bundle exec bundle-audit check --update --ignore CVE-2015-9284'
             yarn build-storybook
+      - save_cache:
+          key: cache
+          paths:
+            - vendor/bundle
+            - node_modules
+            - /home/circleci/.npm
