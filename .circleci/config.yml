@@ -29,6 +29,7 @@ jobs:
       - restore_cache:
           keys:
             - bundle-cache
+            - npmcache
       - run:
           name: Steps
           command: |
@@ -71,4 +72,4 @@ jobs:
             ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
             ./cc-test-reporter upload-coverage
             bundle exec bundle-audit check --update --ignore CVE-2015-9284
-            yarn build-storybook            
+            yarn build-storybook
