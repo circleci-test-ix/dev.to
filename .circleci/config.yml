@@ -44,9 +44,12 @@ jobs:
             bundle update --bundler
             #bundle check --path vendor/bundle
             bundle install --path vendor/bundle
+            echo "before yarn"
             yarn install
+            echo "before curl"
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
+            echo "before db:create"
             bundle exec rails db:create
             bundle exec rails webpacker:compile
             bundle exec rails db:schema:load
