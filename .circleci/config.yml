@@ -34,8 +34,8 @@ jobs:
           name: Steps
           command: |
             date --rfc-3339=seconds
-            gem update --system
-            gem install bundler
+            sudo gem update --system
+            sudo gem install bundler
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
             export NVM_DIR="/opt/circleci/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
