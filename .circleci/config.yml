@@ -8,18 +8,23 @@ workflows:
 
 jobs:
   debug:    
+    environment:
+      BUNDLE_JOBS: 3
+      BUNDLE_RETRY: 3
+      BUNDLE_PATH: vendor/bundle
+      PGHOST: 127.0.0.1
+      PGUSER: circleci-demo-ruby
+      RAILS_ENV: test
+      CC_TEST_REPORTER_ID: f39e060a8b1a558ebd8aff75d5b9760bf1ae98f3f85d628ae28814f3c66438cd
+      DATABASE_URL: "postgres://postgres@localhost/"
+      COVERAGE: true
     docker: # run the steps with Docker
       - image: circleci/ruby:2.6.3-stretch-node-browsers
+      - image: circleci/postgres:9.6-alpine
         environment:
-          BUNDLE_JOBS: 3
-          BUNDLE_RETRY: 3
-          BUNDLE_PATH: vendor/bundle
-          PGHOST: 127.0.0.1
-          PGUSER: circleci-demo-ruby
-          RAILS_ENV: test
-          CC_TEST_REPORTER_ID: f39e060a8b1a558ebd8aff75d5b9760bf1ae98f3f85d628ae28814f3c66438cd
-          DATABASE_URL: "postgres://postgres@localhost/"
-          COVERAGE: true
+          POSTGRES_DB: pandas_nosetest
+          POSTGRES_USER: postgres
+          privileged: true        
     steps:
       - checkout
       - run:
@@ -28,7 +33,8 @@ jobs:
             date --rfc-3339=seconds
             #nvm install
             bundle -v
-            bundle check --path vendor/bundle
+            bundle update --bundler
+            #bundle check --path vendor/bundle
             bundle install --path vendor/bundle
             yarn install
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
