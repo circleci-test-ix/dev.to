@@ -29,7 +29,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - cache
+            - bundle-cache
       - run:
           name: Steps
           command: |
@@ -44,6 +44,13 @@ jobs:
             bundle update --bundler
             #bundle check --path vendor/bundle
             bundle install --path vendor/bundle
+      - save_cache:
+          key: bundle-cache
+          paths:
+            - vendor/bundle
+      - run:
+          name: Steps
+          command: |            
             echo "before yarn"
             yarn install
             echo "before curl"
@@ -64,8 +71,7 @@ jobs:
             'bundle exec bundle-audit check --update --ignore CVE-2015-9284'
             yarn build-storybook
       - save_cache:
-          key: cache
+          key: npmcache
           paths:
-            - vendor/bundle
             - node_modules
             - /home/circleci/.npm
