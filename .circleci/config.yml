@@ -10,7 +10,7 @@ workflows:
       - heroku/deploy-via-git:
           app-name: practicaldev-circleci
           post-deploy: 
-            - run: rails db:migrate
+            - run: heroku run rails db:migrate
 #       - build:
 #           filters:
 #             branches:
