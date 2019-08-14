@@ -29,9 +29,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys:
-            - bundle-cache
-            - node-cache
+          key: bundle-cache
+      - restore_cache:
+          key: node-cache
       - run:
           name: Setup Environment
           command: |
