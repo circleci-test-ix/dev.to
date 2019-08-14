@@ -9,9 +9,11 @@ workflows:
     jobs:
       - build
 #       - heroku/deploy-via-git
+
 jobs:
   build:    
     environment:
+      BUNDLE_PATH: vendor/bundle
       RAILS_ENV: test
       CC_TEST_REPORTER_ID: f39e060a8b1a558ebd8aff75d5b9760bf1ae98f3f85d628ae28814f3c66438cd
       DATABASE_URL: "postgres://postgres@localhost/"
@@ -29,7 +31,7 @@ jobs:
             - bundle-cache
             - npmcachev2
       - run:
-          name: Steps
+          name: Bundle Install
           command: |
             date --rfc-3339=seconds
             sudo gem update --system
@@ -47,7 +49,7 @@ jobs:
           paths:
             - vendor/bundle
       - run:
-          name: Steps
+          name: Yarn Install
           command: |
             yarn install
       - save_cache:
@@ -57,7 +59,7 @@ jobs:
             - ~/.npm
             - ~/.cache
       - run:
-          name: Steps
+          name: Run Tests
           command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter            
