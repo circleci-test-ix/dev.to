@@ -15,7 +15,7 @@ jobs:
     environment:
       BUNDLE_PATH: vendor/bundle
       RAILS_ENV: test
-      CC_TEST_REPORTER_ID: f39e060a8b1a558ebd8aff75d5b9760bf1ae98f3f85d628ae28814f3c66438cd
+      CC_TEST_REPORTER_ID: 42e199897d06699ff0775204bae05b88eb8d3e5ddc28495628aff97b0810f304
       DATABASE_URL: "postgres://postgres@localhost/"
       COVERAGE: true
     docker:
@@ -30,27 +30,30 @@ jobs:
             - bundle-cache
             - npmcachev2
       - run:
-          name: Bundle Install
+          name: Setup Environment
           command: |
             date --rfc-3339=seconds
+            
+            # Update bundler
             sudo gem update --system
             gem install bundler
             bundle update --bundler
+            
+            # Install nvm
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
             export NVM_DIR=$HOME/.nvm
             source $NVM_DIR/nvm.sh
-            #export NVM_DIR="/opt/circleci/.nvm"
-            #[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
             nvm install
-            bundle install --path vendor/bundle
+      - run:
+          name: Bundle Install
+          command: bundle install --path vendor/bundle
       - save_cache:
           key: bundle-cache
           paths:
             - vendor/bundle
       - run:
           name: Yarn Install
-          command: |
-            yarn install
+          command: yarn install
       - save_cache:
           key: npmcachev2
           paths:
