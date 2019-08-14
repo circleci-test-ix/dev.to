@@ -7,8 +7,15 @@ workflows:
   version: 2
   build:
     jobs:
-      - build
-#       - heroku/deploy-via-git
+      - heroku/deploy-via-git:
+          app-name: practicaldev-circleci
+          post-deploy: 
+            - run: rails db:migrate
+#       - build:
+#           filters:
+#             branches:
+#               only:
+#                 - master
 
 jobs:
   build:    
@@ -68,23 +75,17 @@ jobs:
             bundle exec rails db:create
             bundle exec rails webpacker:compile
             bundle exec rails db:schema:load
-            echo "***** 1"
             ./cc-test-reporter before-build
-            echo "***** 2"
             bundle exec rspec spec --color --tty
-            echo "***** 3"
             [ ! -f .approvals ] || bundle exec approvals verify --ask false
-            echo "***** 4"
             ./cc-test-reporter format-coverage -t simplecov -o coverage/codeclimate.simplecov.json
-            echo "***** 5"
             yarn test --colors
-            echo "***** 6"
             ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.lcov.json
-            echo "***** 7"
             ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
-            echo "***** 8"
             ./cc-test-reporter upload-coverage
-            echo "***** 9"
             bundle exec bundle-audit check --update --ignore CVE-2015-9284
-            echo "***** 10"
             yarn build-storybook
+      - heroku/install
+      - heroku/deploy-via-git:
+          app-name: practicaldev-circleci
+          only-branch: master
