@@ -31,7 +31,7 @@ jobs:
       - restore_cache:
           keys:
             - bundle-cache
-            - npmcachev2
+            - node-cache
       - run:
           name: Setup Environment
           command: |
@@ -58,9 +58,9 @@ jobs:
           name: Yarn Install
           command: yarn install
       - save_cache:
-          key: npmcachev2
+          key: node-cache
           paths:
-            - node_modules
+            - ./node_modules
             - ~/.npm
             - ~/.cache
       - run:
